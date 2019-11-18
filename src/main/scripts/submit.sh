@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # chmod a+r /etc/security/keytabs/bigdata.keytab
+# pcs /tmp/kafka_bigdata_jaas.conf
 
 hadoop fs -rm -r -f /tmp/spark_phoenix
 
