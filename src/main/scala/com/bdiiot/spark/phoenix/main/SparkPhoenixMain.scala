@@ -8,7 +8,7 @@ object SparkPhoenixMain {
   def main(args: Array[String]): Unit = {
     if (SECURITY == "SASL_PLAINTEXT") {
       System.setProperty("java.security.krb5.conf", "/etc/krb5.conf")
-      System.setProperty("java.security.auth.login.config", "/etc/kafka/conf/kafka_jaas.conf")
+      System.setProperty("java.security.auth.login.config", "/tmp/kafka_bigdata_jaas.conf")
     }
 
     val spark = SparkHelper.getSparkSession()
