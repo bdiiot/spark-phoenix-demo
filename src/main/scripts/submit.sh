@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# chmod a+r /etc/security/keytabs/bigdata.keytab
+
 hadoop fs -rm -r -f /tmp/spark_phoenix
 
 export SPARK_MAJOR_VERSION=2
