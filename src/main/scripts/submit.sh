@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hadoop fs -rm -r -f /tmp/{checkpoint_realtime,mysql_to_ods}
+hadoop fs -rm -r -f /tmp/spark_phoenix
 
 export SPARK_MAJOR_VERSION=2
 
