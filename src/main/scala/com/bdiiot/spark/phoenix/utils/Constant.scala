@@ -2,6 +2,9 @@ package com.bdiiot.spark.phoenix.utils
 
 object Constant {
   final val HDFS = "hdfs://h11.bdiiot.com"
+  final val USER = "bigdata"
+  final val KEYTAB = "/etc/security/keytabs/bigdata.keytab"
+
   final val PATH_CHECKPOINT = HDFS + "/tmp/spark_phoenix/"
   final val OUTPUT_MODE = "update"
 

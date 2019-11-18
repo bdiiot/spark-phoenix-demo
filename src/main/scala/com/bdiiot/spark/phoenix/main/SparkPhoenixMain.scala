@@ -2,6 +2,8 @@ package com.bdiiot.spark.phoenix.main
 
 import com.bdiiot.spark.phoenix.utils.Constant._
 import com.bdiiot.spark.phoenix.utils.SparkHelper
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.security.UserGroupInformation
 import org.apache.spark.sql
 
 object SparkPhoenixMain {
@@ -9,6 +11,12 @@ object SparkPhoenixMain {
     if (SECURITY == "SASL_PLAINTEXT") {
       System.setProperty("java.security.krb5.conf", "/etc/krb5.conf")
       System.setProperty("java.security.auth.login.config", "/tmp/kafka_bigdata_jaas.conf")
+
+      val configuration: Configuration = new Configuration()
+      configuration.set("hadoop.security.authentication", "Kerberos")
+
+      UserGroupInformation.setConfiguration(configuration)
+      UserGroupInformation.loginUserFromKeytab(USER, KEYTAB)
     }
 
     val spark = SparkHelper.getSparkSession()
