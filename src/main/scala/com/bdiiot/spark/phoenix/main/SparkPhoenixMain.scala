@@ -39,8 +39,8 @@ object SparkPhoenixMain {
         var resultSet: ResultSet = _
 
         override def open(partitionId: Long, version: Long): Boolean = {
-          val url = "/usr/hdp/current/phoenix-client/phoenix-client.jar"
-          new URLClassLoader(Seq(new URL(url)), Thread.currentThread().getContextClassLoader())
+          val url = "file:///usr/hdp/current/phoenix-client/phoenix-client.jar"
+          new URLClassLoader(Seq(new URL(url)), Thread.currentThread().getContextClassLoader)
           val jdbc_url = "jdbc:phoenix:h11.bdiiot.com,h12.bdiiot.com,h13.bdiiot.com:2181:/hbase-secure:hbase-bdiiot@BDIIOT.COM:/etc/security/keytabs/hbase.headless.keytab"
           Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
           connection = DriverManager.getConnection(jdbc_url)
