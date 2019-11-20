@@ -4,6 +4,9 @@ import java.sql.{Connection, DriverManager, ResultSet, Statement}
 
 import com.bdiiot.spark.phoenix.utils.Constant._
 import com.bdiiot.spark.phoenix.utils.SparkHelper
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.Path
+import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.spark.sql
 import org.apache.spark.sql.ForeachWriter
 
@@ -36,6 +39,11 @@ object SparkPhoenixMain {
         var resultSet: ResultSet = _
 
         override def open(partitionId: Long, version: Long): Boolean = {
+          val config: Configuration = HBaseConfiguration.create()
+          config.addResource(new Path(CORE_SITE))
+          config.addResource(new Path(HDFS_SITE))
+          config.addResource(new Path(HBASE_SITE))
+
           val jdbc_url = "jdbc:phoenix:h11.bdiiot.com,h12.bdiiot.com,h13.bdiiot.com:2181:/hbase-secure:hbase-bdiiot@BDIIOT.COM:/etc/security/keytabs/hbase.headless.keytab"
           Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
           connection = DriverManager.getConnection(jdbc_url)
