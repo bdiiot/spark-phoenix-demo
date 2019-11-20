@@ -1,0 +1,8 @@
+Kerberos cluster
+Kafka -> Spark -> Phoenix
+
+1、chmod a+r /etc/security/keytabs/bigdata.keytab
+2、pcs /tmp/kafka_bigdata_jaas.conf
+3、pom.xml phoenix-core provided
+4、submit --jars "/usr/hdp/current/phoenix-client/phoenix-client.jar"
+5、resources hdfs-site.xml hbase-site.xml
