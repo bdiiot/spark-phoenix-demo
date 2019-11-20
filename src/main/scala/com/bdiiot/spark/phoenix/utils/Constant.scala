@@ -20,4 +20,7 @@ object Constant {
   final val SECURITY = "SASL_PLAINTEXT"
   // auto.offset.reset [latest, earliest, none]
   final val OFFSETS = "earliest"
+
+  final val JDBC_URL = "jdbc:phoenix:h11.bdiiot.com,h12.bdiiot.com,h13.bdiiot.com:2181:/hbase-secure:hbase-bdiiot@BDIIOT.COM:/etc/security/keytabs/hbase.headless.keytab"
+  final val PHOENIX_DRIVER = "org.apache.phoenix.jdbc.PhoenixDriver"
 }

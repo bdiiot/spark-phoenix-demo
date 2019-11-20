@@ -36,33 +36,22 @@ object SparkPhoenixMain {
         var resultSet: ResultSet = _
 
         override def open(partitionId: Long, version: Long): Boolean = {
-          //          val config: Configuration = HBaseConfiguration.create()
-          //          config.addResource(new Path(CORE_SITE))
-          //          config.addResource(new Path(HDFS_SITE))
-          //          config.addResource(new Path(HBASE_SITE))
-          //
-          //          val configuration: Configuration = new Configuration()
-          //          configuration.set("hadoop.security.authentication", "Kerberos")
-          //
-          //          UserGroupInformation.setConfiguration(configuration)
-          //          UserGroupInformation.loginUserFromKeytab(USER, KEYTAB)
-
-          val jdbc_url = "jdbc:phoenix:h11.bdiiot.com,h12.bdiiot.com,h13.bdiiot.com:2181:/hbase-secure:hbase-bdiiot@BDIIOT.COM:/etc/security/keytabs/hbase.headless.keytab"
-          Class.forName("org.apache.phoenix.jdbc.PhoenixDriver")
-          connection = DriverManager.getConnection(jdbc_url)
+          Class.forName(PHOENIX_DRIVER)
+          connection = DriverManager.getConnection(JDBC_URL)
           statement = connection.createStatement
           true
         }
 
         override def process(value: String): Unit = {
-          var sql = "upsert into test.test_phoenix values (1,'a')"
+          val key = System.nanoTime().toString.reverse
+          var sql = s"upsert into test.test_phoenix values (${key},'${value}')"
           statement.executeUpdate(sql)
           connection.commit()
 
           sql = "select * from test.test_phoenix"
           val resultSet = statement.executeQuery(sql)
           while (resultSet.next()) {
-            println(resultSet.getObject(1).toString)
+            println(resultSet.getObject(2).toString)
           }
         }
 
