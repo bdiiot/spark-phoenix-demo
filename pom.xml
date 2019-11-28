@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <hdp.version>2.6.5.0-292</hdp.version>
         <hadoop.version>2.7.3</hadoop.version>
         <spark.version>2.3.0</spark.version>
         <scala.version>2.11</scala.version>
@@ -17,18 +18,10 @@
     </properties>
 
     <dependencies>
-        <!-- phoenix -->
-        <dependency>
-            <groupId>sqlline</groupId>
-            <artifactId>sqlline</artifactId>
-            <version>1.1.9</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.apache.phoenix</groupId>
             <artifactId>phoenix-core</artifactId>
-            <version>${phoenix.version}-HBase-1.1</version>
-            <scope>provided</scope>
+            <version>${phoenix.version}.${hdp.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
