@@ -13,7 +13,7 @@ class HiveForeachWriter() extends ForeachWriter[String] {
   var sparkSession: SparkSession = _
 
   override def open(partitionId: Long, version: Long): Boolean = {
-    sparkSession = SparkHelper.getSparkSession()
+    sparkSession = SparkSession.builder.master("local").enableHiveSupport().getOrCreate()
     true
   }
 
