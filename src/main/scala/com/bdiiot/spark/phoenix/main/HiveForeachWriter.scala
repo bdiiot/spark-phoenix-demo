@@ -13,11 +13,11 @@ class HiveForeachWriter() extends ForeachWriter[String] {
   var sparkSession: SparkSession = _
 
   override def open(partitionId: Long, version: Long): Boolean = {
-    sparkSession = SparkHelper.getLocalSession
     true
   }
 
   override def process(value: String): Unit = {
+    sparkSession = SparkHelper.getLocalSession
     println(sparkSession.version.concat(value))
   }
 
