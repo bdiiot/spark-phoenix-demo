@@ -28,7 +28,7 @@ object SparkPhoenixMain extends SparkSessionBuilder {
     val kafkaSourceString = kafkaSource.selectExpr("CAST(value AS STRING)").as[String]
 
     val query = kafkaSourceString.writeStream
-      .foreach(new ForeachWriter() {
+      .foreach(new ForeachWriter[String] {
         override def open(partitionId: Long, version: Long): Boolean = true
 
         override def process(value: String): Unit = {
