@@ -3,12 +3,12 @@ package com.bdiiot.spark.phoenix.main
 import java.sql.{Connection, DriverManager, ResultSet, Statement}
 
 import com.bdiiot.spark.phoenix.utils.Constant._
-import com.bdiiot.spark.phoenix.utils.MainBuilder
+import com.bdiiot.spark.phoenix.utils.SparkSessionBuilder
 import org.apache.spark.sql
 import org.apache.spark.sql.ForeachWriter
 
 
-object SparkPhoenixMain extends MainBuilder {
+object SparkPhoenixMain extends SparkSessionBuilder {
   def main(args: Array[String]): Unit = {
     if (SECURITY == "SASL_PLAINTEXT") {
       System.setProperty("java.security.krb5.conf", "/etc/krb5.conf")
