@@ -1,10 +1,11 @@
 package com.bdiiot.spark.phoenix.main
 
+import com.bdiiot.spark.phoenix.utils.SparkSessionBuilder
 import org.apache.spark.sql.{ForeachWriter, SparkSession}
 
-object HiveForeachWriter {
-  def apply(sparkSession: SparkSession): ForeachWriter[String] = {
-    new HiveForeachWriter(sparkSession)
+object HiveForeachWriter extends SparkSessionBuilder {
+  def apply(): ForeachWriter[String] = {
+    new HiveForeachWriter(buildSparkSession)
   }
 }
 

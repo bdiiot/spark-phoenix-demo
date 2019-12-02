@@ -3,7 +3,6 @@ package com.bdiiot.spark.phoenix.main
 import com.bdiiot.spark.phoenix.utils.Constant._
 import com.bdiiot.spark.phoenix.utils.{SparkHelper, SparkSessionBuilder}
 import org.apache.spark.sql
-import org.apache.spark.sql.ForeachWriter
 
 
 object SparkPhoenixMain extends SparkSessionBuilder {
@@ -28,15 +27,7 @@ object SparkPhoenixMain extends SparkSessionBuilder {
     val kafkaSourceString = kafkaSource.selectExpr("CAST(value AS STRING)").as[String]
 
     val query = kafkaSourceString.writeStream
-      .foreach(new ForeachWriter[String] {
-        override def open(partitionId: Long, version: Long): Boolean = true
-
-        override def process(value: String): Unit = {
-          println(spark.version.concat(value))
-        }
-
-        override def close(errorOrNull: Throwable): Unit = {}
-      })
+      .foreach(HiveForeachWriter.apply())
       .outputMode(OUTPUT_MODE)
       .option("checkpointLocation", PATH_CHECKPOINT + "demo")
       .start()
