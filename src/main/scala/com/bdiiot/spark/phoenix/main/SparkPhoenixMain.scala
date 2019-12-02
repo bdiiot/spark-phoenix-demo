@@ -1,12 +1,14 @@
 package com.bdiiot.spark.phoenix.main
 
+import java.sql.{Connection, ResultSet, Statement}
+
 import com.bdiiot.spark.phoenix.utils.Constant._
-import com.bdiiot.spark.phoenix.utils.{SparkHelper, SparkSessionBuilder}
+import com.bdiiot.spark.phoenix.utils.MainBuilder
 import org.apache.spark.sql
 import org.apache.spark.sql.ForeachWriter
 
 
-object SparkPhoenixMain extends SparkSessionBuilder {
+object SparkPhoenixMain extends MainBuilder {
   def main(args: Array[String]): Unit = {
     if (SECURITY == "SASL_PLAINTEXT") {
       System.setProperty("java.security.krb5.conf", "/etc/krb5.conf")
@@ -29,19 +31,56 @@ object SparkPhoenixMain extends SparkSessionBuilder {
 
     val query = kafkaSourceString.writeStream
       .foreach(new ForeachWriter[String] {
-        override def open(partitionId: Long, version: Long): Boolean = true
+        var connection: Connection = _
+        var statement: Statement = _
+        var resultSet: ResultSet = _
+
+        override def open(partitionId: Long, version: Long): Boolean = {
+          connection = buildPhoenixConnection
+          statement = connection.createStatement
+          true
+        }
 
         override def process(value: String): Unit = {
           println(spark.version.concat(value))
+
+          val key = System.nanoTime().toString.reverse
+          var sql = s"upsert into test.test_phoenix values ($key,'$value')"
+          statement.executeUpdate(sql)
+          connection.commit()
+
+          sql = "select * from test.test_phoenix"
+          resultSet = statement.executeQuery(sql)
+          while (resultSet.next()) {
+            println(resultSet.getObject(2).toString)
+          }
         }
 
-        override def close(errorOrNull: Throwable): Unit = {}
+        override def close(errorOrNull: Throwable): Unit = {
+          try {
+            resultSet.close()
+          } catch {
+            case ex: Exception =>
+              println(s"close resultSet failed, msg=$ex")
+          }
+          try {
+            statement.close()
+          } catch {
+            case ex: Exception =>
+              println(s"close statement failed, msg=$ex")
+          }
+          try {
+            connection.close()
+          } catch {
+            case ex: Exception =>
+              println(s"close connection failed, msg=$ex")
+          }
+        }
       })
       .outputMode(OUTPUT_MODE)
       .option("checkpointLocation", PATH_CHECKPOINT + "demo")
       .start()
 
     query.awaitTermination()
-    SparkHelper.close()
   }
 }

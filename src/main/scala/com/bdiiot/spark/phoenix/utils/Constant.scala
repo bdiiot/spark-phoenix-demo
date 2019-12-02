@@ -2,6 +2,7 @@ package com.bdiiot.spark.phoenix.utils
 
 object Constant {
   final val HDFS = "hdfs://h11.bdiiot.com"
+  final val APP_NAME = "spark_phoenix_demo"
 
   final val PATH_CHECKPOINT = HDFS + "/tmp/spark_phoenix/"
   final val OUTPUT_MODE = "update"
