@@ -12,7 +12,7 @@ object SparkPhoenixMain {
       System.setProperty("java.security.auth.login.config", "/tmp/kafka_bigdata_jaas.conf")
     }
 
-    val spark = SparkHelper.getSparkSession()
+    val spark = SparkHelper.getSparkSession
 
     val kafkaSource: sql.DataFrame = spark
       .readStream
@@ -33,6 +33,6 @@ object SparkPhoenixMain {
       .start()
 
     query.awaitTermination()
-    SparkHelper.close
+    SparkHelper.close()
   }
 }
