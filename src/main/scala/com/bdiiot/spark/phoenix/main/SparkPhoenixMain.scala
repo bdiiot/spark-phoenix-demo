@@ -1,6 +1,6 @@
 package com.bdiiot.spark.phoenix.main
 
-import java.sql.{Connection, ResultSet, Statement}
+import java.sql.{Connection, DriverManager, ResultSet, Statement}
 
 import com.bdiiot.spark.phoenix.utils.Constant._
 import com.bdiiot.spark.phoenix.utils.MainBuilder
@@ -36,7 +36,8 @@ object SparkPhoenixMain extends MainBuilder {
         var resultSet: ResultSet = _
 
         override def open(partitionId: Long, version: Long): Boolean = {
-          connection = buildPhoenixConnection
+          Class.forName(PHOENIX_DRIVER)
+          connection = DriverManager.getConnection(JDBC_URL)
           statement = connection.createStatement
           true
         }
