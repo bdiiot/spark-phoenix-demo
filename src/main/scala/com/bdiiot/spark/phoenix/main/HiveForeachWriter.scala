@@ -1,6 +1,5 @@
 package com.bdiiot.spark.phoenix.main
 
-import com.bdiiot.spark.phoenix.utils.SparkHelper
 import org.apache.spark.sql.{ForeachWriter, SparkSession}
 
 object HiveForeachWriter {
@@ -22,6 +21,6 @@ class HiveForeachWriter() extends ForeachWriter[String] {
   }
 
   override def close(errorOrNull: Throwable): Unit = {
-    SparkHelper.close
+    sparkSession.close()
   }
 }
