@@ -1,5 +1,6 @@
 package com.bdiiot.spark.phoenix.main
 
+import com.bdiiot.spark.phoenix.utils.SparkHelper
 import org.apache.spark.sql.{ForeachWriter, SparkSession}
 
 object HiveForeachWriter {
@@ -12,7 +13,7 @@ class HiveForeachWriter() extends ForeachWriter[String] {
   var sparkSession: SparkSession = _
 
   override def open(partitionId: Long, version: Long): Boolean = {
-    sparkSession = SparkSession.builder.master("local").enableHiveSupport().getOrCreate()
+    sparkSession = SparkHelper.getLocalSession
     true
   }
 
