@@ -27,7 +27,7 @@ object SparkPhoenixMain extends SparkSessionBuilder {
     val kafkaSourceString = kafkaSource.selectExpr("CAST(value AS STRING)").as[String]
 
     val query = kafkaSourceString.writeStream
-      .foreach(HiveForeachWriter.apply())
+      .foreach(new HiveForeachWriter(spark))
       .outputMode(OUTPUT_MODE)
       .option("checkpointLocation", PATH_CHECKPOINT + "demo")
       .start()
