@@ -32,7 +32,8 @@ object SparkPhoenixMain {
       .option("checkpointLocation", PATH_CHECKPOINT + "demo")
       .start()
 
+    SparkHelper.stopByMarkFile(query)
     query.awaitTermination()
-    SparkHelper.close
+    SparkHelper.close()
   }
 }

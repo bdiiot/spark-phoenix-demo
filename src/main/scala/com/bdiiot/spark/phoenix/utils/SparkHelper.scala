@@ -1,7 +1,10 @@
 package com.bdiiot.spark.phoenix.utils
 
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.Path
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.streaming.StreamingQuery
 
 object SparkHelper {
   private var singleSparkSession: SparkSession = _
@@ -22,7 +25,7 @@ object SparkHelper {
     singleSparkSession
   }
 
-  def close: Unit = {
+  def close(): Unit = {
     if (singleSparkSession != null) {
       try {
         singleSparkSession.close()
@@ -33,4 +36,27 @@ object SparkHelper {
       }
     }
   }
+
+  def stopByMarkFile(query: StreamingQuery): Unit = {
+    val intervalMills = 10 * 1000
+    var isStop = false
+    val hdfsFilePath = "/tmp/spark_phoenix_demo_stop"
+    while (!isStop) {
+      isStop = query.awaitTermination(intervalMills)
+      if (!isStop && isExistsMarkFile(hdfsFilePath)) {
+        val second = 2
+        println(s"stop after $second seconds")
+        Thread.sleep(second * 1000)
+        query.stop()
+      }
+    }
+  }
+
+  def isExistsMarkFile(hdfsFilePath: String): Boolean = {
+    val conf = new Configuration()
+    val path = new Path(hdfsFilePath)
+    val fs = path.getFileSystem(conf)
+    fs.exists(path)
+  }
+
 }
