@@ -30,7 +30,7 @@ class PhoenixForeachWriter() extends ForeachWriter[String] {
     connection.commit()
 
     sql = "select * from test.test_phoenix"
-    val resultSet = statement.executeQuery(sql)
+    resultSet = statement.executeQuery(sql)
     while (resultSet.next()) {
       println(resultSet.getObject(2).toString)
     }
