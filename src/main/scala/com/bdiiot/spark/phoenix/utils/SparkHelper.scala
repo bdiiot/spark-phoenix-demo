@@ -1,5 +1,6 @@
 package com.bdiiot.spark.phoenix.utils
 
+import com.bdiiot.spark.phoenix.utils.Constant._
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.apache.spark.SparkConf
@@ -19,7 +20,7 @@ object SparkHelper {
           .config(conf)
           .enableHiveSupport()
           .getOrCreate()
-        singleSparkSession.sparkContext.setCheckpointDir(Constant.PATH_CHECKPOINT + "spark")
+        singleSparkSession.sparkContext.setCheckpointDir(PATH_CHECKPOINT + "spark")
       }
     }
     singleSparkSession
@@ -40,10 +41,9 @@ object SparkHelper {
   def stopByMarkFile(query: StreamingQuery): Unit = {
     val intervalMills = 10 * 1000
     var isStop = false
-    val hdfsFilePath = "/tmp/spark_phoenix_demo_stop"
     while (!isStop) {
       isStop = query.awaitTermination(intervalMills)
-      if (!isStop && isExistsMarkFile(hdfsFilePath)) {
+      if (!isStop && isExistsMarkFile(STOP_FILE)) {
         val second = 2
         println(s"stop after $second seconds")
         Thread.sleep(second * 1000)
